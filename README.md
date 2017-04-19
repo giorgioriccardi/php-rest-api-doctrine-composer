@@ -9,6 +9,13 @@ Starter structure comes straight from the [Doctrine](https://doctrine-orm.readth
 
 ## Instructions:
 Explode this repo in a 'composer-project' folder in your webserver;
+[Composer linux-osx-install](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx);
+From shell cmd root location:
+```
+composer install
+```
+see Composer documentation for dos installation.
+
 Create a Mysql db, by default in bootstrap.php is defined like this:
 ```
 'user'     => 'admin',
@@ -20,7 +27,7 @@ From shell cmd in the bootstrap.php location:
 vendor\bin\doctrine orm:schema-tool:create
 ```
 ##### Credits:
-[Aleee](https://github.com/afranceschetti/)
+[Alessandro Franceschetti](https://github.com/afranceschetti/)
 
 [Stackoverflow](http://stackoverflow.com/questions/4578335/creating-php-class-instance-with-a-string)
 ```
