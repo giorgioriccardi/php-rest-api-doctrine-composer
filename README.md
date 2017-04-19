@@ -9,6 +9,7 @@ Starter structure comes straight from the [Doctrine](https://doctrine-orm.readth
 
 ## Instructions:
 Explode this repo in a 'composer-project' folder in your webserver;
+
 [Composer linux-osx-install](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx);
 From shell cmd root location:
 ```
@@ -27,6 +28,7 @@ From shell cmd in the bootstrap.php location:
 ```
 vendor\bin\doctrine orm:schema-tool:create
 ```
+
 ##### Credits:
 [Alessandro Franceschetti](https://github.com/afranceschetti/)
 
