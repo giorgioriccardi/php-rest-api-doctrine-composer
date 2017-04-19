@@ -11,6 +11,7 @@ Starter structure comes straight from the [Doctrine](https://doctrine-orm.readth
 Explode this repo in a 'composer-project' folder in your webserver;
 
 [Composer linux-osx-install](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx);
+
 From shell cmd root location:
 ```
 composer install
