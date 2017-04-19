@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>REST API PHP DEMO - April 2017</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.5.7/angular-sanitize.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <style>
+    body {
+        font-family: sans-serif;
+        font-size: 14px;
+        margin: 0;
+    }
+    
+    .header {
+        background-color: #f7f7f7;
+        padding: 24px;
+        border-bottom: solid 1px #1dbbee;
+        clear: both;
+        overflow: hidden;
+    }
+    
+    .header h1 {
+        float: left;
+    }
+    
+    .header a {
+        display: inline block;
+        float: right;
+        color: #333;
+        text-decoration: none;
+        margin: 24px;
+    }
+    
+    .header a:hover {
+        color: #1dbbee;
+    }
+    
+    .content {
+        margin: 24px;
+    }
+    
+    .widget-container {
+        float: left;
+        margin: 24px 48px;
+    }
+    </style>
+    <script type="text/javascript">
+    angular.module('myApp', ['ngSanitize']).controller('myCtrl', function($scope, $http) {
+
+        $scope.debug = true;
+        var loadProducts = function() {
+            // $http.get('http://localhost/doctrineSeedProject/api.php/product/', {}).then(
+            $http.get('./api.php/product/', {}).then(
+
+                function(response) {
+                    console.debug("loadProducts", response);
+                    $scope.products = response.data;
+                },
+                function(data) {
+                    console.error("loadProducts ERROR", data);
+                }
+            );
+        };
+
+        loadProducts();
+
+        $scope.detailProduct = function(product) {
+            console.debug("detailProduct", product);
+            $http.get('./api.php/product/' + product.id, {}).then(
+                function(response) {
+                    console.debug("detailProduct", response);
+                    //$scope.debugPhp  = response.data;
+                    $scope.detailedProduct = response.data;
+                },
+                function(data) {
+                    console.error("detailProduct ERROR", data);
+                    $scope.error = "Error: " + data;
+                }
+            );
+        };
+
+        $scope.createProduct = function() {
+            $scope.info = null;
+            $scope.error = null;
+            var data = {
+                "name": $scope.newProductName
+            };
+            console.log("createProduct", data);
+            $http.post('./api.php/product/', data, {}).then(
+                function(response) {
+                    console.debug("createProduct", response);
+                    $scope.info = "Created product with id " + response.data;
+                    loadProducts();
+
+                },
+                function(data) {
+                    console.error("createProduct ERROR", data);
+                    $scope.error = "Error: " + data;
+                }
+            );
+        };
+
+        $scope.updateProduct = function(product) {
+            $scope.info = null;
+            $scope.error = null;
+            console.log("updateProduct", product);
+            $http.put('./api.php/product/', product, {}).then(
+                function(response) {
+                    console.debug("updateProduct", response);
+                    $scope.info = "Product updated";
+                    loadProducts();
+                },
+                function(data) {
+                    console.error("updateProduct ERROR", data);
+                    $scope.error = "Error: " + data;
+                }
+            );
+        };
+
+        $scope.deleteProduct = function(product) {
+            $scope.info = null;
+            $scope.error = null;
+            console.log("deleteProduct", product);
+            $http.delete('./api.php/product/' + product.id, {}).then(
+                function(response) {
+                    console.debug("deleteProduct", response);
+
+                    $scope.info = "Product deleted";
+                    loadProducts();
+                },
+                function(data) {
+                    console.error("deleteProduct ERROR", data);
+                    $scope.error = "Error: " + data;
+                }
+            );
+        };
+    });
+    </script>
+</head>
+
+<body>
+    <header class='header'>
+        <h1>Rest API in php Demo</h1>
+        <a href='#' target='_blank'>Source</a>
+    </header>
+    <div ng-app="myApp" class='content'>
+        <div ng-controller="myCtrl">
+            <p><span ng-bind-html='debugPhp'></span></p>
+            <div class="alert alert-success" role="alert" ng-show='info!=null'>{{info}}</div>
+            <div class="alert alert-danger" role="alert" ng-show='error!=null'>{{error}}</div>
+            <h2>New Product</h2>
+            <div class='row'>
+                <div class='col-sm-2'><strong>Name</strong></div>
+                <div class='col-sm-2'>
+                    <input type='text' placeholder='Giorgio or something...' ng-model='newProductName' required/>
+                </div>
+                <div class='col-sm-2'><a href ng-click='createProduct()' class='btn btn-default'>Create</a></div>
+            </div>
+            <h2>Products</h2>
+            <div class='row'>
+                <div class='col-sm-8'>
+                    <div class='row'>
+                        <div class='col-sm-2'><strong>Id</strong></div>
+                        <div class='col-sm-5'><strong>Name</strong></div>
+                    </div>
+                    <div class='row' ng-repeat='product in products track by $index'>
+                        <div class='col-sm-1'>{{product.id}}</div>
+                        <div class='col-sm-3' ng-show='!product.isUpdating'>{{product.name}}</div>
+                        <div class='col-sm-2' ng-show='!product.isUpdating'><a href ng-click='product.isUpdating = true'>Edit</a></div>
+                        <div class='col-sm-2' ng-show='!product.isUpdating'><a href ng-click='deleteProduct(product)'>Delete</a></div>
+                        <div class='col-sm-3' ng-show='product.isUpdating'>
+                            <input type='text' placeholder='new name' ng-model='product.name' required />
+                        </div>
+                        <div class='col-sm-2' ng-show='product.isUpdating'><a href ng-click='updateProduct(product)'>Update</a></div>
+                        <div class='col-sm-2' ng-show='product.isUpdating'>&nbsp;</div>
+                        <div class='col-sm-2'><a href ng-click='detailProduct(product)'>Detail</a></div>
+                    </div>
+                </div>
+                <div class='col-sm-4' ng-show='detailedProduct !=null'>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Detail</h3></div>
+                        <div class="panel-body">
+                            <strong>id</strong> {{detailedProduct.id}} | <strong>name</strong> {{detailedProduct.name}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
