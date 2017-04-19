@@ -22,6 +22,7 @@ Create a Mysql db, by default in bootstrap.php is defined like this:
 'password' => 'admin',
 'dbname'   => 'doctrineseed'
 ```
+
 From shell cmd in the bootstrap.php location:
 ```
 vendor\bin\doctrine orm:schema-tool:create
