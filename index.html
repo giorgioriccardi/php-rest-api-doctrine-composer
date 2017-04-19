@@ -63,7 +63,6 @@
         var loadProducts = function() {
             // $http.get('http://localhost/doctrineSeedProject/api.php/product/', {}).then(
             $http.get('./api.php/product/', {}).then(
-
                 function(response) {
                     console.debug("loadProducts", response);
                     $scope.products = response.data;
