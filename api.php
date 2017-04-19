@@ -10,20 +10,25 @@ $method = $_SERVER['REQUEST_METHOD'];
 $request = explode('/', trim($_SERVER['PATH_INFO'],'/'));
 $table = $request[0];
 
-switch ($table) 
-{
-	case 'product':
-		$EntityManager = new ProductManager();
-	break;
-}
+// switch ($table) {
+// 	case 'product':
+// 		$EntityManager = new ProductManager();
+// 	break;
+// }
 
-if(count($request)>1)
+// By-pass generic switch Product in favour of EntityManager
+
+$entityManagerClass = ucfirst($table) . "Manager";
+$EntityManager = new $entityManagerClass();
+// http://stackoverflow.com/questions/4578335/creating-php-class-instance-with-a-string
+
+if ( count( $request ) > 1 )
 	$entityId = $request[1];
 else
 	$entityId = null;
 	
-switch ($method) 
-{
+switch ($method) {
+
   case 'GET':
 	if($entityId==null){
 		$entities = $EntityManager->listEntities(null, null, null, null); 
@@ -34,17 +39,20 @@ switch ($method)
 		echo json_encode($entity);
 	}
 	break;
+
   case 'PUT':
 	$putdata = file_get_contents("php://input");
 	$request = json_decode($putdata);
 	$EntityManager->updateEntity($request->id, $request->name);
 	break;
+
   case 'POST':
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	$id = $EntityManager->createEntity($request->name);
 	echo $id;
 	break;
+
   case 'DELETE':
 	$EntityManager->deleteEntity($entityId);
 	break;

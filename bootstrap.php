@@ -16,7 +16,7 @@ $dbParams = array(
 );
 
 
-$config = Setup::createAnnotationMetadataConfiguration(array(__DIR__."/src"), $isDevMode);
+$config = Setup::createAnnotationMetadataConfiguration(array( __DIR__."/src" ), $isDevMode);
 
 $entityManager = EntityManager::create($dbParams, $config);
 
